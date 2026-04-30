@@ -1,0 +1,39 @@
+{
+  "name": "github-diff",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "build:static": "BUILD_MODE=static next build",
+    "start": "next start",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.0.2",
+    "next": "^15.3.2",
+    "react": "^19.2.5",
+    "react-diff-viewer-continued": "^4.2.2",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.13",
+    "@tailwindcss/postcss": "^4.2.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^29.1.0",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.5"
+  }
+}
