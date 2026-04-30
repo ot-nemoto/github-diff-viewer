@@ -29,7 +29,7 @@ graph TD
 
 各列に以下の入力欄：
 - Owner / Repository（プレースホルダー: `owner/repository または GitHub URL`）
-  - GitHub のファイル URL（`https://github.com/{owner}/{repo}/blob/{ref}/{path}`）を貼り付けると全フィールドを自動補完
+  - GitHub のファイル URL（`https://github.com/{owner}/{repo}/blob/{ref}/{path}`）を貼り付けると全フィールドを自動補完（`#L10` などのハッシュフラグメントや `?plain=1` などのクエリは自動で除去）
   - フォーカスアウト時にブランチ・タグ一覧を取得し、Ref フィールドの補完候補（datalist）として表示
 - Ref（ブランチ / タグ / コミット SHA）
   - フォーカスアウト時にファイルツリーを取得し、File Path フィールドの補完候補（datalist）として表示
@@ -52,8 +52,9 @@ graph TD
 
 | 状態 | 表示 |
 |------|------|
-| Loading | スピナー + "ファイルを取得中..." |
+| Loading | ボタンが "取得中..." に変化、無効化 |
 | Empty | フォームのみ表示、差分エリアは非表示 |
+| 初期ロード（URL パラメータ有） | マウント時に自動でファイル取得を開始し、完了後に差分を表示 |
 | Error (404) | Left / Right に対応した列に "リポジトリまたはファイルが見つかりません" を個別表示 |
 | Error (401/403) | Left / Right に対応した列に "プライベートリポジトリには PAT が必要です" を個別表示 |
 | Error (Rate Limit) | Left / Right に対応した列に "API レート制限に達しました。PAT を入力するか、しばらく待ってください" を個別表示 |
