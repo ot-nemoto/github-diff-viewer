@@ -29,8 +29,9 @@ graph TD
 
 各列に以下の入力欄：
 - Owner / Repository（プレースホルダー: `owner/repository または GitHub URL`）
-  - GitHub のファイル URL（`https://github.com/{owner}/{repo}/blob/{ref}/{path}`）を貼り付けると全フィールドを自動補完（`#L10` などのハッシュフラグメントや `?plain=1` などのクエリは自動で除去）
-  - フォーカスアウト時にブランチ・タグ一覧を取得し、Ref フィールドの補完候補（datalist）として表示
+  - GitHub のファイル URL（`/blob/`・`/blame/`・`/raw/` 形式）を貼り付けると全フィールドを自動補完（`#L10` などのハッシュフラグメントや `?plain=1` などのクエリは自動で除去）
+  - ref に `/` を含むブランチ名は貼り付け時に API でブランチ一覧を取得し正しく解決する
+  - フォーカスアウト時にブランチ・タグ一覧を取得し、Ref フィールドの補完候補（datalist）として表示（URL 貼り付け時に既取得済みの場合は再取得しない）
 - Ref（ブランチ / タグ / コミット SHA）
   - フォーカスアウト時にファイルツリーを取得し、File Path フィールドの補完候補（datalist）として表示
 - File Path

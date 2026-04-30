@@ -1,5 +1,12 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { FileSelector } from "@/components/FileSelector";
+
+vi.mock("@/lib/github", () => ({
+  fetchRefs: vi.fn().mockResolvedValue({ branches: ["main", "develop"], tags: ["v1.0.0"] }),
+  fetchTree: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock("@/lib/storage", () => ({ getToken: vi.fn().mockReturnValue(null) }));
 
 const defaultValue = { owner: "", repo: "", ref: "", path: "" };
 const ownerRepoPlaceholder = "owner/repository または GitHub URL";
@@ -32,11 +39,13 @@ describe("FileSelector", () => {
     );
   });
 
-  test("parses GitHub URL and fills all fields", () => {
+  test("parses GitHub URL and fills all fields", async () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
-    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-      target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md" },
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md" },
+      });
     });
     expect(onChange).toHaveBeenCalledWith({
       owner: "octocat",
@@ -46,29 +55,74 @@ describe("FileSelector", () => {
     });
   });
 
-  test("parses GitHub URL with nested path", () => {
+  test("parses GitHub URL with nested path", async () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
-    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-      target: { value: "https://github.com/octocat/Hello-World/blob/main/src/index.ts" },
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blob/main/src/index.ts" },
+      });
     });
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "src/index.ts" }));
   });
 
-  test("strips line fragment (#L10) from GitHub URL", () => {
+  test("parses GitHub blame URL", async () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
-    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-      target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md#L10" },
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blame/main/README.md" },
+      });
+    });
+    expect(onChange).toHaveBeenCalledWith({
+      owner: "octocat",
+      repo: "Hello-World",
+      ref: "main",
+      path: "README.md",
+    });
+  });
+
+  test("resolves branch name with slash using fetched refs", async () => {
+    const { fetchRefs } = await import("@/lib/github");
+    vi.mocked(fetchRefs).mockResolvedValueOnce({
+      branches: ["revert/master-merge", "main"],
+      tags: [],
+    });
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: {
+          value: "https://github.com/octocat/Hello-World/blob/revert/master-merge/CLAUDE.md",
+        },
+      });
+    });
+    expect(onChange).toHaveBeenCalledWith({
+      owner: "octocat",
+      repo: "Hello-World",
+      ref: "revert/master-merge",
+      path: "CLAUDE.md",
+    });
+  });
+
+  test("strips line fragment (#L10) from GitHub URL", async () => {
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md#L10" },
+      });
     });
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "README.md" }));
   });
 
-  test("strips query string (?plain=1) from GitHub URL", () => {
+  test("strips query string (?plain=1) from GitHub URL", async () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
-    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-      target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md?plain=1" },
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md?plain=1" },
+      });
     });
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "README.md" }));
   });

@@ -4,11 +4,22 @@ const mockGetContent = vi.hoisted(() => vi.fn());
 const mockListBranches = vi.hoisted(() => vi.fn());
 const mockListTags = vi.hoisted(() => vi.fn());
 const mockGetTree = vi.hoisted(() => vi.fn());
+const mockPaginate = vi.hoisted(() =>
+  vi
+    .fn()
+    .mockImplementation(
+      async (fn: (p: unknown) => Promise<{ data: unknown[] }>, params: unknown) => {
+        const result = await fn(params);
+        return result.data;
+      },
+    ),
+);
 
 vi.mock("@octokit/rest", () => ({
   // biome-ignore lint/complexity/useArrowFunction: arrow function cannot be used with `new`
   Octokit: vi.fn().mockImplementation(function () {
     return {
+      paginate: mockPaginate,
       repos: {
         getContent: mockGetContent,
         listBranches: mockListBranches,

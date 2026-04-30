@@ -24,9 +24,12 @@ describe("useQueryParams", () => {
     expect(result.current.state.right.owner).toBe("");
   });
 
-  test("reads left file spec from query string", () => {
+  test("reads left file spec from query params", () => {
     mocks.searchParams = new URLSearchParams({
-      left: "octocat/Hello-World/blob/main/README.md",
+      lo: "octocat",
+      lr: "Hello-World",
+      lref: "main",
+      lp: "README.md",
     });
 
     const { result } = renderHook(() => useQueryParams());
@@ -38,9 +41,12 @@ describe("useQueryParams", () => {
     });
   });
 
-  test("reads right file spec from query string", () => {
+  test("reads right file spec from query params", () => {
     mocks.searchParams = new URLSearchParams({
-      right: "owner2/repo2/blob/develop/src/index.ts",
+      ro: "owner2",
+      rr: "repo2",
+      rref: "develop",
+      rp: "src/index.ts",
     });
 
     const { result } = renderHook(() => useQueryParams());
@@ -52,16 +58,20 @@ describe("useQueryParams", () => {
     });
   });
 
-  test("parses nested path correctly", () => {
+  test("parses branch name with slash correctly", () => {
     mocks.searchParams = new URLSearchParams({
-      left: "octocat/Hello-World/blob/main/src/utils/index.ts",
+      lo: "octocat",
+      lr: "Hello-World",
+      lref: "feature/my-branch",
+      lp: "src/index.ts",
     });
 
     const { result } = renderHook(() => useQueryParams());
-    expect(result.current.state.left.path).toBe("src/utils/index.ts");
+    expect(result.current.state.left.ref).toBe("feature/my-branch");
+    expect(result.current.state.left.path).toBe("src/index.ts");
   });
 
-  test("update calls router.replace with GitHub-like URL params", () => {
+  test("update calls router.replace with split params", () => {
     const { result } = renderHook(() => useQueryParams());
 
     act(() => {
@@ -72,12 +82,37 @@ describe("useQueryParams", () => {
 
     expect(mocks.replace).toHaveBeenCalledTimes(1);
     const url = mocks.replace.mock.calls[0][0] as string;
-    expect(url).toContain("left=octocat%2FHello-World%2Fblob%2Fmain%2FREADME.md");
+    expect(url).toContain("lo=octocat");
+    expect(url).toContain("lr=Hello-World");
+    expect(url).toContain("lref=main");
+    expect(url).toContain("lp=README.md");
+  });
+
+  test("update sets split params for branch name with slash", () => {
+    const { result } = renderHook(() => useQueryParams());
+
+    act(() => {
+      result.current.update({
+        left: {
+          owner: "octocat",
+          repo: "Hello-World",
+          ref: "feature/my-branch",
+          path: "src/index.ts",
+        },
+      });
+    });
+
+    const url = mocks.replace.mock.calls[0][0] as string;
+    expect(url).toContain("lref=feature%2Fmy-branch");
+    expect(url).toContain("lp=src%2Findex.ts");
   });
 
   test("update merges partial state", () => {
     mocks.searchParams = new URLSearchParams({
-      left: "existing/repo/blob/main/file.ts",
+      lo: "existing",
+      lr: "repo",
+      lref: "main",
+      lp: "file.ts",
     });
 
     const { result } = renderHook(() => useQueryParams());
@@ -89,12 +124,18 @@ describe("useQueryParams", () => {
     });
 
     const url = mocks.replace.mock.calls[0][0] as string;
-    expect(url).toContain("left=");
-    expect(url).toContain("right=");
-    expect(url).toContain("new-owner");
+    const params = new URL(url, "http://localhost").searchParams;
+    expect(params.get("lo")).toBe("existing");
+    expect(params.get("lr")).toBe("repo");
+    expect(params.get("lref")).toBe("main");
+    expect(params.get("lp")).toBe("file.ts");
+    expect(params.get("ro")).toBe("new-owner");
+    expect(params.get("rr")).toBe("new-repo");
+    expect(params.get("rref")).toBe("dev");
+    expect(params.get("rp")).toBe("app.ts");
   });
 
-  test("omits param when spec is incomplete", () => {
+  test("omits params when spec is incomplete", () => {
     const { result } = renderHook(() => useQueryParams());
 
     act(() => {
@@ -104,6 +145,6 @@ describe("useQueryParams", () => {
     });
 
     const url = mocks.replace.mock.calls[0][0] as string;
-    expect(url).not.toContain("left=");
+    expect(url).not.toContain("lo=");
   });
 });
