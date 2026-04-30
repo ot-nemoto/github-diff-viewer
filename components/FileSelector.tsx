@@ -53,6 +53,7 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     branches: [],
     tags: [],
   });
+  const [refsOwnerRepo, setRefsOwnerRepo] = useState("");
   const [files, setFiles] = useState<string[]>([]);
 
   const update = (field: keyof FileSpec, val: string) => {
@@ -64,8 +65,10 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     if (base) {
       setOwnerRepo(`${base.owner}/${base.repo}`);
       const token = getToken() ?? undefined;
+      const key = `${base.owner}/${base.repo}`;
       const result = await fetchRefs({ owner: base.owner, repo: base.repo, token });
       setRefs(result);
+      setRefsOwnerRepo(key);
       const allRefs = [...result.branches, ...result.tags];
       const { ref, path } = resolveRefAndPath(base.refAndPath, allRefs);
       onChange({ owner: base.owner, repo: base.repo, ref, path });
@@ -82,9 +85,11 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
 
   const handleOwnerRepoBlur = async () => {
     if (!value.owner || !value.repo) return;
+    if (refsOwnerRepo === `${value.owner}/${value.repo}`) return;
     const token = getToken() ?? undefined;
     const result = await fetchRefs({ owner: value.owner, repo: value.repo, token });
     setRefs(result);
+    setRefsOwnerRepo(`${value.owner}/${value.repo}`);
   };
 
   const handleRefBlur = async () => {
