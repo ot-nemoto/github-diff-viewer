@@ -55,14 +55,25 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
   });
   const [refsOwnerRepo, setRefsOwnerRepo] = useState("");
   const [files, setFiles] = useState<string[]>([]);
+  const [urlError, setUrlError] = useState("");
 
   const update = (field: keyof FileSpec, val: string) => {
     onChange({ ...value, [field]: val });
   };
 
+  const isGitHubUrl = (raw: string) => {
+    try {
+      const { protocol, hostname } = new URL(raw);
+      return (protocol === "http:" || protocol === "https:") && hostname === "github.com";
+    } catch {
+      return false;
+    }
+  };
+
   const handleOwnerRepoChange = async (raw: string) => {
     const base = parseGitHubUrlBase(raw);
     if (base) {
+      setUrlError("");
       setOwnerRepo(`${base.owner}/${base.repo}`);
       const token = getToken() ?? undefined;
       const key = `${base.owner}/${base.repo}`;
@@ -74,6 +85,12 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
       onChange({ owner: base.owner, repo: base.repo, ref, path });
       return;
     }
+    if (isGitHubUrl(raw)) {
+      setOwnerRepo(raw);
+      setUrlError("ファイルの URL を入力してください（例: .../blob/main/README.md）");
+      return;
+    }
+    setUrlError("");
     setOwnerRepo(raw);
     const idx = raw.indexOf("/");
     if (idx === -1) {
@@ -112,9 +129,16 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
           value={ownerRepo}
           placeholder="owner/repository または GitHub URL"
           className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-invalid={!!urlError}
+          aria-describedby={urlError ? `${side}-url-error` : undefined}
           onChange={(e) => handleOwnerRepoChange(e.target.value)}
           onBlur={handleOwnerRepoBlur}
         />
+        {urlError && (
+          <p id={`${side}-url-error`} role="alert" className="mt-1 text-xs text-red-600">
+            {urlError}
+          </p>
+        )}
       </div>
       <div>
         <label htmlFor={`${side}-ref`} className="block text-xs text-gray-500 mb-1">
