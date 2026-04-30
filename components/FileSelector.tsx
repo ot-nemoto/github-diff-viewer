@@ -61,10 +61,10 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     onChange({ ...value, [field]: val });
   };
 
-  const isUrl = (raw: string) => {
+  const isGitHubUrl = (raw: string) => {
     try {
-      const { protocol } = new URL(raw);
-      return protocol === "http:" || protocol === "https:";
+      const { protocol, hostname } = new URL(raw);
+      return (protocol === "http:" || protocol === "https:") && hostname === "github.com";
     } catch {
       return false;
     }
@@ -85,7 +85,7 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
       onChange({ owner: base.owner, repo: base.repo, ref, path });
       return;
     }
-    if (isUrl(raw)) {
+    if (isGitHubUrl(raw)) {
       setOwnerRepo(raw);
       setUrlError("ファイルの URL を入力してください（例: .../blob/main/README.md）");
       return;
