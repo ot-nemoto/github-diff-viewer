@@ -65,7 +65,7 @@ app/page.tsx 画面組み立て
 
 ## 静的エクスポート設定
 
-`BUILD_MODE=static` のときのみ静的エクスポード設定を適用する。
+`BUILD_MODE=static` のときのみ静的エクスポート設定を適用する。
 `npm run dev` は通常の Next.js として動作し、静的制約を受けない。
 
 ```ts
