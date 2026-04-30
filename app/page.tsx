@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { DiffViewer } from "@/components/DiffViewer";
 import { FileSelector } from "@/components/FileSelector";
 import { TokenSettings } from "@/components/TokenSettings";
@@ -12,6 +12,7 @@ function ComparePageContent() {
   const [localState, setLocalState] = useState(state);
   const leftFile = useFileContent();
   const rightFile = useFileContent();
+  const initialFetchDone = useRef(false);
 
   const isLoading = leftFile.loading || rightFile.loading;
   const hasContent = leftFile.content !== null && rightFile.content !== null;
@@ -19,6 +20,14 @@ function ComparePageContent() {
   const isReady = (s: typeof localState.left) =>
     s.owner.trim() !== "" && s.repo.trim() !== "" && s.ref.trim() !== "" && s.path.trim() !== "";
   const canCompare = !isLoading && isReady(localState.left) && isReady(localState.right);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run once on mount
+  useEffect(() => {
+    if (initialFetchDone.current) return;
+    if (!isReady(state.left) || !isReady(state.right)) return;
+    initialFetchDone.current = true;
+    Promise.all([leftFile.fetch(state.left), rightFile.fetch(state.right)]);
+  }, []);
 
   const handleCompare = async () => {
     update(localState);
