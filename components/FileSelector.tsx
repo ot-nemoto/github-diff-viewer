@@ -129,10 +129,16 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
           value={ownerRepo}
           placeholder="owner/repository または GitHub URL"
           className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-invalid={!!urlError}
+          aria-describedby={urlError ? `${side}-url-error` : undefined}
           onChange={(e) => handleOwnerRepoChange(e.target.value)}
           onBlur={handleOwnerRepoBlur}
         />
-        {urlError && <p className="mt-1 text-xs text-red-600">{urlError}</p>}
+        {urlError && (
+          <p id={`${side}-url-error`} role="alert" className="mt-1 text-xs text-red-600">
+            {urlError}
+          </p>
+        )}
       </div>
       <div>
         <label htmlFor={`${side}-ref`} className="block text-xs text-gray-500 mb-1">
