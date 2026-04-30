@@ -92,7 +92,9 @@ describe("FileSelector", () => {
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
     await act(async () => {
       fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-        target: { value: "https://github.com/octocat/Hello-World/blob/revert/master-merge/CLAUDE.md" },
+        target: {
+          value: "https://github.com/octocat/Hello-World/blob/revert/master-merge/CLAUDE.md",
+        },
       });
     });
     expect(onChange).toHaveBeenCalledWith({
