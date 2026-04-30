@@ -114,6 +114,6 @@ PAT はユーザーがブラウザ上で入力し `localStorage` に保存する
 /?left=octocat/Hello-World/blob/main/README.md&right=owner2/repo2/blob/main/README.md
 ```
 
-形式は `{owner}/{repo}/blob/{ref}/{path}`。`blob` がセパレータとして機能するため、ref や path に `/` が含まれていてもパース可能。フィールドが不完全な場合はパラメータを省略する。
+形式は `{owner}/{repo}/blob/{ref}/{path}`。`/blob/` の後を `refPath` とし、最初の `/` で ref と path に分割する。そのため **ref（ブランチ名・タグ名）に `/` を含む場合はパースが正しく動作しない制約がある**。フィールドが不完全な場合はパラメータを省略する。
 
 モード（Split / Unified）はコンポーネント内部の state で管理し、URL には含めない。
