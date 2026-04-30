@@ -17,26 +17,21 @@ export interface QueryState {
 
 const DEFAULT_SPEC: FileSpec = { owner: "", repo: "", ref: "", path: "" };
 
-function specToParam(spec: FileSpec): string {
-  if (!spec.owner || !spec.repo || !spec.ref || !spec.path) return "";
-  return `${spec.owner}/${spec.repo}/blob/${spec.ref}/${spec.path}`;
+function specToParams(prefix: "l" | "r", spec: FileSpec, params: URLSearchParams): void {
+  if (!spec.owner || !spec.repo || !spec.ref || !spec.path) return;
+  params.set(`${prefix}o`, spec.owner);
+  params.set(`${prefix}r`, spec.repo);
+  params.set(`${prefix}ref`, spec.ref);
+  params.set(`${prefix}p`, spec.path);
 }
 
-function paramToSpec(param: string | null): FileSpec {
-  if (!param) return { ...DEFAULT_SPEC };
-  const blobIdx = param.indexOf("/blob/");
-  if (blobIdx === -1) return { ...DEFAULT_SPEC };
-  const ownerRepo = param.slice(0, blobIdx);
-  const refPath = param.slice(blobIdx + 6);
-  const slashIdx = ownerRepo.indexOf("/");
-  const refSlashIdx = refPath.indexOf("/");
-  if (slashIdx === -1 || refSlashIdx === -1) return { ...DEFAULT_SPEC };
-  return {
-    owner: ownerRepo.slice(0, slashIdx),
-    repo: ownerRepo.slice(slashIdx + 1),
-    ref: refPath.slice(0, refSlashIdx),
-    path: refPath.slice(refSlashIdx + 1),
-  };
+function paramsToSpec(prefix: "l" | "r", searchParams: URLSearchParams): FileSpec {
+  const owner = searchParams.get(`${prefix}o`) ?? "";
+  const repo = searchParams.get(`${prefix}r`) ?? "";
+  const ref = searchParams.get(`${prefix}ref`) ?? "";
+  const path = searchParams.get(`${prefix}p`) ?? "";
+  if (!owner || !repo || !ref || !path) return { ...DEFAULT_SPEC };
+  return { owner, repo, ref, path };
 }
 
 export function useQueryParams() {
@@ -44,22 +39,20 @@ export function useQueryParams() {
   const searchParams = useSearchParams();
 
   const state: QueryState = {
-    left: paramToSpec(searchParams.get("left")),
-    right: paramToSpec(searchParams.get("right")),
+    left: paramsToSpec("l", searchParams),
+    right: paramsToSpec("r", searchParams),
   };
 
   const update = useCallback(
     (next: Partial<QueryState>) => {
       const current = {
-        left: paramToSpec(searchParams.get("left")),
-        right: paramToSpec(searchParams.get("right")),
+        left: paramsToSpec("l", searchParams),
+        right: paramsToSpec("r", searchParams),
       };
       const merged = { ...current, ...next };
       const params = new URLSearchParams();
-      const leftParam = specToParam(merged.left);
-      const rightParam = specToParam(merged.right);
-      if (leftParam) params.set("left", leftParam);
-      if (rightParam) params.set("right", rightParam);
+      specToParams("l", merged.left, params);
+      specToParams("r", merged.right, params);
       router.replace(`?${params.toString()}`);
     },
     [router, searchParams],

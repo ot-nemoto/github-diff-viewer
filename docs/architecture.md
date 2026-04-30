@@ -110,10 +110,23 @@ PAT はユーザーがブラウザ上で入力し `localStorage` に保存する
 
 ## URL クエリパラメータ仕様
 
+left / right の各フィールドを個別のパラメータで表現する。
+
 ```
-/?left=octocat/Hello-World/blob/main/README.md&right=owner2/repo2/blob/main/README.md
+/?lo=octocat&lr=Hello-World&lref=main&lp=README.md&ro=owner2&rr=repo2&rref=main&rp=README.md
 ```
 
-形式は `{owner}/{repo}/blob/{ref}/{path}`。`/blob/` の後を `refPath` とし、最初の `/` で ref と path に分割する。そのため **ref（ブランチ名・タグ名）に `/` を含む場合はパースが正しく動作しない制約がある**。フィールドが不完全な場合はパラメータを省略する。
+| パラメータ | 内容 |
+|------------|------|
+| `lo` | left: owner |
+| `lr` | left: repo |
+| `lref` | left: ref（ブランチ / タグ / コミット SHA） |
+| `lp` | left: ファイルパス |
+| `ro` | right: owner |
+| `rr` | right: repo |
+| `rref` | right: ref |
+| `rp` | right: ファイルパス |
+
+フィールドが 1 つでも欠けている場合、その側（left / right）のパラメータは一切セットしない。ref にブランチ名など `/` を含む値も正しく扱える。
 
 モード（Split / Unified）はコンポーネント内部の state で管理し、URL には含めない。
