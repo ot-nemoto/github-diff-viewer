@@ -86,6 +86,7 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
       return;
     }
     if (isUrl(raw)) {
+      setOwnerRepo(raw);
       setUrlError("ファイルの URL を入力してください（例: .../blob/main/README.md）");
       return;
     }
