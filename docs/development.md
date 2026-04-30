@@ -17,30 +17,27 @@ npm run dev
 
 ## ビルド・静的エクスポート
 
+通常ビルド（開発・検証用）:
+
 ```bash
 npm run build
 ```
 
-`out/` ディレクトリに静的ファイルが生成される。
+GitHub Pages 向け静的エクスポート（`out/` を生成）:
+
+```bash
+npm run build:static
+```
 
 ## デプロイ手順（GitHub Pages）
 
-1. リポジトリの Settings → Pages → Source を `gh-pages` ブランチに設定
-2. 以下のコマンドでデプロイ
+デプロイは GitHub Actions（`.github/workflows/deploy-github-pages.yml`）が自動で行う。`master` ブランチへのマージをトリガーに `npm run build:static` を実行し、生成した `out/` を GitHub Pages へ配置する。
 
-```bash
-npm run deploy
-```
-
-`package.json` の `deploy` スクリプト:
-
-```json
-"deploy": "next build && touch out/.nojekyll && gh-pages -d out"
-```
+手動デプロイは不要。
 
 ## ローカルで静的ビルドを確認
 
 ```bash
-npm run build
+npm run build:static
 npx serve out
 ```
