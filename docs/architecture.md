@@ -75,8 +75,8 @@ const isStatic = process.env.BUILD_MODE === "static";
 const nextConfig = {
   ...(isStatic && {
     output: "export",
-    basePath: "/github-diff",
-    assetPrefix: "/github-diff",
+    basePath: "/github-diff-viewer",
+    assetPrefix: "/github-diff-viewer",
     trailingSlash: true,
     images: { unoptimized: true },
   }),

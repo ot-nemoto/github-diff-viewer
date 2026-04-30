@@ -3,8 +3,8 @@
 ## ローカルセットアップ
 
 ```bash
-git clone https://github.com/<owner>/github-diff.git
-cd github-diff
+git clone https://github.com/<owner>/github-diff-viewer.git
+cd github-diff-viewer
 npm install
 npm run dev
 ```
