@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import type { FileSpec } from "@/hooks/useQueryParams";
 import { fetchRefs, fetchTree } from "@/lib/github";
 import { getToken } from "@/lib/storage";
-import type { FileSpec } from "@/hooks/useQueryParams";
 
 interface FileSelectorProps {
   side: "left" | "right";
@@ -14,9 +14,7 @@ interface FileSelectorProps {
 const LABEL = { left: "比較元（Left）", right: "比較先（Right）" };
 
 function parseGitHubUrl(url: string): FileSpec | null {
-  const match = url.match(
-    /^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/,
-  );
+  const match = url.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
   if (!match) return null;
   const [, owner, repo, ref, path] = match;
   return { owner, repo, ref, path };
@@ -70,8 +68,11 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
       <h2 className="text-sm font-semibold text-gray-700">{LABEL[side]}</h2>
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Owner / Repository</label>
+        <label htmlFor={`${side}-owner-repo`} className="block text-xs text-gray-500 mb-1">
+          Owner / Repository
+        </label>
         <input
+          id={`${side}-owner-repo`}
           type="text"
           value={ownerRepo}
           placeholder="owner/repository または GitHub URL"
@@ -81,8 +82,11 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
         />
       </div>
       <div>
-        <label className="block text-xs text-gray-500 mb-1">Ref（ブランチ / タグ / コミット）</label>
+        <label htmlFor={`${side}-ref`} className="block text-xs text-gray-500 mb-1">
+          Ref（ブランチ / タグ / コミット）
+        </label>
         <input
+          id={`${side}-ref`}
           type="text"
           value={value.ref}
           placeholder="main"
@@ -101,8 +105,11 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
         </datalist>
       </div>
       <div>
-        <label className="block text-xs text-gray-500 mb-1">File Path</label>
+        <label htmlFor={`${side}-path`} className="block text-xs text-gray-500 mb-1">
+          File Path
+        </label>
         <input
+          id={`${side}-path`}
           type="text"
           value={value.path}
           placeholder="src/index.ts"

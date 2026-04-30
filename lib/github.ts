@@ -105,8 +105,7 @@ function getStatus(error: unknown): number | null {
 
 function isRateLimit(error: unknown): boolean {
   if (!error || typeof error !== "object") return false;
-  const remaining = (
-    error as { response?: { headers?: Record<string, string> } }
-  ).response?.headers?.["x-ratelimit-remaining"];
+  const remaining = (error as { response?: { headers?: Record<string, string> } }).response
+    ?.headers?.["x-ratelimit-remaining"];
   return remaining === "0";
 }

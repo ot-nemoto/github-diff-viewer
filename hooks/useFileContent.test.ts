@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
-import { useFileContent } from "./useFileContent";
-import { GitHubError, fetchFileContent } from "@/lib/github";
+import { fetchFileContent, GitHubError } from "@/lib/github";
 import { getToken } from "@/lib/storage";
+import { useFileContent } from "./useFileContent";
 
 // fetchFileContent だけモック。GitHubError は実物を使い instanceof が正しく動くようにする
 vi.mock("@/lib/github", async (importOriginal) => {
@@ -30,14 +30,22 @@ describe("useFileContent", () => {
 
   test("sets loading true during fetch", async () => {
     let resolve: (value: { content: string; sha: string }) => void;
-    mockFetch.mockReturnValue(new Promise((r) => { resolve = r; }));
+    mockFetch.mockReturnValue(
+      new Promise((r) => {
+        resolve = r;
+      }),
+    );
 
     const { result } = renderHook(() => useFileContent());
 
-    act(() => { result.current.fetch(params); });
+    act(() => {
+      result.current.fetch(params);
+    });
     expect(result.current.loading).toBe(true);
 
-    await act(async () => { resolve?.({ content: "content", sha: "abc" }); });
+    await act(async () => {
+      resolve?.({ content: "content", sha: "abc" });
+    });
     expect(result.current.loading).toBe(false);
   });
 
@@ -45,7 +53,9 @@ describe("useFileContent", () => {
     mockFetch.mockResolvedValue({ content: "file content", sha: "abc123" });
 
     const { result } = renderHook(() => useFileContent());
-    await act(async () => { await result.current.fetch(params); });
+    await act(async () => {
+      await result.current.fetch(params);
+    });
 
     expect(result.current.content).toBe("file content");
     expect(result.current.error).toBeNull();
@@ -55,7 +65,9 @@ describe("useFileContent", () => {
     mockFetch.mockRejectedValue(new GitHubError("リポジトリまたはファイルが見つかりません", 404));
 
     const { result } = renderHook(() => useFileContent());
-    await act(async () => { await result.current.fetch(params); });
+    await act(async () => {
+      await result.current.fetch(params);
+    });
 
     expect(result.current.content).toBeNull();
     expect(result.current.error).toBe("リポジトリまたはファイルが見つかりません");
@@ -65,7 +77,9 @@ describe("useFileContent", () => {
     mockFetch.mockRejectedValue(new Error("network error"));
 
     const { result } = renderHook(() => useFileContent());
-    await act(async () => { await result.current.fetch(params); });
+    await act(async () => {
+      await result.current.fetch(params);
+    });
 
     expect(result.current.error).toBe("ファイルの取得に失敗しました");
   });
@@ -75,7 +89,9 @@ describe("useFileContent", () => {
     mockFetch.mockResolvedValue({ content: "content", sha: "abc" });
 
     const { result } = renderHook(() => useFileContent());
-    await act(async () => { await result.current.fetch(params); });
+    await act(async () => {
+      await result.current.fetch(params);
+    });
 
     expect(mockFetch).toHaveBeenCalledWith(expect.objectContaining({ token: "ghp_my_token" }));
   });
@@ -84,7 +100,9 @@ describe("useFileContent", () => {
     mockFetch.mockResolvedValue({ content: "content", sha: "abc" });
 
     const { result } = renderHook(() => useFileContent());
-    await act(async () => { await result.current.fetch(params); });
+    await act(async () => {
+      await result.current.fetch(params);
+    });
 
     expect(mockFetch).toHaveBeenCalledWith(expect.objectContaining({ token: undefined }));
   });

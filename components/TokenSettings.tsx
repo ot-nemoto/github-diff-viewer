@@ -65,7 +65,8 @@ export function TokenSettings() {
             </button>
           </div>
           <p className="text-xs text-gray-500">
-            Classic PAT（スコープ: <code className="bg-gray-100 px-1 rounded">repo</code>）を使用してください。
+            Classic PAT（スコープ: <code className="bg-gray-100 px-1 rounded">repo</code>
+            ）を使用してください。
             プライベートリポジトリへのアクセスに必要です。パブリックリポジトリのみの場合は不要です。
             <a
               href="https://github.com/settings/tokens/new?scopes=repo"

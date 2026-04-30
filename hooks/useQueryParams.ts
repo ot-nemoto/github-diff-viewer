@@ -50,7 +50,11 @@ export function useQueryParams() {
 
   const update = useCallback(
     (next: Partial<QueryState>) => {
-      const merged = { ...state, ...next };
+      const current = {
+        left: paramToSpec(searchParams.get("left")),
+        right: paramToSpec(searchParams.get("right")),
+      };
+      const merged = { ...current, ...next };
       const params = new URLSearchParams();
       const leftParam = specToParam(merged.left);
       const rightParam = specToParam(merged.right);
@@ -58,7 +62,6 @@ export function useQueryParams() {
       if (rightParam) params.set("right", rightParam);
       router.replace(`?${params.toString()}`);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [router, searchParams],
   );
 

@@ -52,9 +52,7 @@ describe("FileSelector", () => {
     fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
       target: { value: "https://github.com/octocat/Hello-World/blob/main/src/index.ts" },
     });
-    expect(onChange).toHaveBeenCalledWith(
-      expect.objectContaining({ path: "src/index.ts" }),
-    );
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "src/index.ts" }));
   });
 
   test("calls onChange with updated ref", () => {

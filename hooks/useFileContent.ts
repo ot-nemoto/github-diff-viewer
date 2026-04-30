@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { GitHubError, fetchFileContent, type FileParams } from "@/lib/github";
+import { type FileParams, fetchFileContent, GitHubError } from "@/lib/github";
 import { getToken } from "@/lib/storage";
 
 interface FileState {
@@ -25,8 +25,7 @@ export function useFileContent() {
       setState({ content: result.content, loading: false, error: null });
       return result.content;
     } catch (error) {
-      const message =
-        error instanceof GitHubError ? error.message : "ファイルの取得に失敗しました";
+      const message = error instanceof GitHubError ? error.message : "ファイルの取得に失敗しました";
       setState({ content: null, loading: false, error: message });
       return null;
     }

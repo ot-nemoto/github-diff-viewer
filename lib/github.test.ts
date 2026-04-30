@@ -1,4 +1,4 @@
-import { GitHubError, fetchFileContent, fetchRefs, fetchTree } from "./github";
+import { fetchFileContent, fetchRefs, fetchTree } from "./github";
 
 const mockGetContent = vi.hoisted(() => vi.fn());
 const mockListBranches = vi.hoisted(() => vi.fn());
@@ -6,6 +6,7 @@ const mockListTags = vi.hoisted(() => vi.fn());
 const mockGetTree = vi.hoisted(() => vi.fn());
 
 vi.mock("@octokit/rest", () => ({
+  // biome-ignore lint/complexity/useArrowFunction: arrow function cannot be used with `new`
   Octokit: vi.fn().mockImplementation(function () {
     return {
       repos: {

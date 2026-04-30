@@ -62,14 +62,16 @@ function ComparePageContent() {
             <div>
               {leftFile.error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  <span className="font-semibold">Left: </span>{leftFile.error}
+                  <span className="font-semibold">Left: </span>
+                  {leftFile.error}
                 </div>
               )}
             </div>
             <div>
               {rightFile.error && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  <span className="font-semibold">Right: </span>{rightFile.error}
+                  <span className="font-semibold">Right: </span>
+                  {rightFile.error}
                 </div>
               )}
             </div>
