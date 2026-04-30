@@ -34,12 +34,12 @@ export async function fetchRefs(
   const { owner, repo, token } = params;
   const octokit = new Octokit({ auth: token });
   const [branchesRes, tagsRes] = await Promise.allSettled([
-    octokit.repos.listBranches({ owner, repo, per_page: 100 }),
-    octokit.repos.listTags({ owner, repo, per_page: 100 }),
+    octokit.paginate(octokit.repos.listBranches, { owner, repo, per_page: 100 }),
+    octokit.paginate(octokit.repos.listTags, { owner, repo, per_page: 100 }),
   ]);
   return {
-    branches: branchesRes.status === "fulfilled" ? branchesRes.value.data.map((b) => b.name) : [],
-    tags: tagsRes.status === "fulfilled" ? tagsRes.value.data.map((t) => t.name) : [],
+    branches: branchesRes.status === "fulfilled" ? branchesRes.value.map((b) => b.name) : [],
+    tags: tagsRes.status === "fulfilled" ? tagsRes.value.map((t) => t.name) : [],
   };
 }
 
