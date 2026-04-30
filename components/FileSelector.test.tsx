@@ -127,6 +127,35 @@ describe("FileSelector", () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "README.md" }));
   });
 
+  test("shows error message when non-file GitHub URL is pasted", async () => {
+    render(<FileSelector side="left" value={defaultValue} onChange={() => {}} />);
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/ot-nemoto/github-diff/actions/runs/12345" },
+      });
+    });
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "ファイルの URL を入力してください",
+    );
+  });
+
+  test("clears error message when valid file URL is pasted after invalid URL", async () => {
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/ot-nemoto/github-diff/actions/runs/12345" },
+      });
+    });
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+        target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md" },
+      });
+    });
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
   test("calls onChange with updated ref", () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
