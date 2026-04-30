@@ -21,7 +21,7 @@ function parseGitHubUrl(url: string): FileSpec | null {
     return null;
   }
   if (parsed.hostname !== "github.com") return null;
-  const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+  const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|blame|raw)\/([^/]+)\/(.+)$/);
   if (!match) return null;
   const [, owner, repo, ref, path] = match;
   return { owner, repo, ref, path };

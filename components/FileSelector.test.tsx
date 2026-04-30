@@ -55,6 +55,20 @@ describe("FileSelector", () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "src/index.ts" }));
   });
 
+  test("parses GitHub blame URL", () => {
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+      target: { value: "https://github.com/octocat/Hello-World/blame/main/README.md" },
+    });
+    expect(onChange).toHaveBeenCalledWith({
+      owner: "octocat",
+      repo: "Hello-World",
+      ref: "main",
+      path: "README.md",
+    });
+  });
+
   test("strips line fragment (#L10) from GitHub URL", () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
