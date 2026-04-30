@@ -124,8 +124,15 @@ describe("useQueryParams", () => {
     });
 
     const url = mocks.replace.mock.calls[0][0] as string;
-    expect(url).toContain("lo=existing");
-    expect(url).toContain("ro=new-owner");
+    const params = new URL(url, "http://localhost").searchParams;
+    expect(params.get("lo")).toBe("existing");
+    expect(params.get("lr")).toBe("repo");
+    expect(params.get("lref")).toBe("main");
+    expect(params.get("lp")).toBe("file.ts");
+    expect(params.get("ro")).toBe("new-owner");
+    expect(params.get("rr")).toBe("new-repo");
+    expect(params.get("rref")).toBe("dev");
+    expect(params.get("rp")).toBe("app.ts");
   });
 
   test("omits params when spec is incomplete", () => {
