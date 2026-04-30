@@ -1,11 +1,11 @@
 # GitHub Diff
 
-![CI](https://github.com/ot-nemoto/github-diff/actions/workflows/ci.yml/badge.svg)
-![Version](https://img.shields.io/github/package-json/v/ot-nemoto/github-diff)
-![Next.js](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff/next?logo=next.js&label=Next.js&color=black)
-![TypeScript](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff/dev/typescript?logo=typescript&logoColor=white&label=TypeScript&color=3178C6)
-![Tailwind CSS](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff/dev/tailwindcss?logo=tailwindcss&logoColor=white&label=Tailwind%20CSS&color=06B6D4)
-![License](https://img.shields.io/github/license/ot-nemoto/github-diff)
+![CI](https://github.com/ot-nemoto/github-diff-viewer/actions/workflows/ci.yml/badge.svg)
+![Version](https://img.shields.io/github/package-json/v/ot-nemoto/github-diff-viewer)
+![Next.js](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff-viewer/next?logo=next.js&label=Next.js&color=black)
+![TypeScript](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff-viewer/dev/typescript?logo=typescript&logoColor=white&label=TypeScript&color=3178C6)
+![Tailwind CSS](https://img.shields.io/github/package-json/dependency-version/ot-nemoto/github-diff-viewer/dev/tailwindcss?logo=tailwindcss&logoColor=white&label=Tailwind%20CSS&color=06B6D4)
+![License](https://img.shields.io/github/license/ot-nemoto/github-diff-viewer)
 
 異なる GitHub リポジトリ間でファイルを自由に比較できる Web ツール。
 
