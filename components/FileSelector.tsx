@@ -55,14 +55,24 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
   });
   const [refsOwnerRepo, setRefsOwnerRepo] = useState("");
   const [files, setFiles] = useState<string[]>([]);
+  const [urlError, setUrlError] = useState("");
 
   const update = (field: keyof FileSpec, val: string) => {
     onChange({ ...value, [field]: val });
   };
 
+  const isGitHubUrl = (raw: string) => {
+    try {
+      return new URL(raw).hostname === "github.com";
+    } catch {
+      return false;
+    }
+  };
+
   const handleOwnerRepoChange = async (raw: string) => {
     const base = parseGitHubUrlBase(raw);
     if (base) {
+      setUrlError("");
       setOwnerRepo(`${base.owner}/${base.repo}`);
       const token = getToken() ?? undefined;
       const key = `${base.owner}/${base.repo}`;
@@ -74,6 +84,11 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
       onChange({ owner: base.owner, repo: base.repo, ref, path });
       return;
     }
+    if (isGitHubUrl(raw)) {
+      setUrlError("ファイルの URL を入力してください（例: .../blob/main/README.md）");
+      return;
+    }
+    setUrlError("");
     setOwnerRepo(raw);
     const idx = raw.indexOf("/");
     if (idx === -1) {
@@ -115,6 +130,7 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
           onChange={(e) => handleOwnerRepoChange(e.target.value)}
           onBlur={handleOwnerRepoBlur}
         />
+        {urlError && <p className="mt-1 text-xs text-red-600">{urlError}</p>}
       </div>
       <div>
         <label htmlFor={`${side}-ref`} className="block text-xs text-gray-500 mb-1">
