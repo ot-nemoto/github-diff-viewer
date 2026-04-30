@@ -103,7 +103,7 @@ PAT はユーザーがブラウザ上で入力し `localStorage` に保存する
 
 - `GET /repos/{owner}/{repo}/contents/{path}?ref={ref}` でファイル内容を取得
 - レスポンスの `content`（Base64）を `TextDecoder` を使った UTF-8 対応デコードで表示
-- `GET /repos/{owner}/{repo}/branches` + `GET /repos/{owner}/{repo}/tags`：ブランチ・タグ一覧取得（`fetchRefs`）
+- `GET /repos/{owner}/{repo}/branches` + `GET /repos/{owner}/{repo}/tags`：ブランチ・タグ一覧取得（`fetchRefs`）。Octokit の `paginate` で全ページを取得し、100件超のリポジトリにも対応
 - `GET /repos/{owner}/{repo}/git/trees/{ref}?recursive=1`：ファイルツリー取得（`fetchTree`）
 - トークンなし: パブリックリポジトリのみ、60 req/時
 - トークンあり: パブリック + プライベート、5000 req/時
