@@ -14,7 +14,14 @@ interface FileSelectorProps {
 const LABEL = { left: "比較元（Left）", right: "比較先（Right）" };
 
 function parseGitHubUrl(url: string): FileSpec | null {
-  const match = url.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
+  if (parsed.hostname !== "github.com") return null;
+  const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
   if (!match) return null;
   const [, owner, repo, ref, path] = match;
   return { owner, repo, ref, path };

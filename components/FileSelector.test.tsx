@@ -55,6 +55,24 @@ describe("FileSelector", () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "src/index.ts" }));
   });
 
+  test("strips line fragment (#L10) from GitHub URL", () => {
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+      target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md#L10" },
+    });
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "README.md" }));
+  });
+
+  test("strips query string (?plain=1) from GitHub URL", () => {
+    const onChange = vi.fn();
+    render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
+    fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
+      target: { value: "https://github.com/octocat/Hello-World/blob/main/README.md?plain=1" },
+    });
+    expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ path: "README.md" }));
+  });
+
   test("calls onChange with updated ref", () => {
     const onChange = vi.fn();
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
