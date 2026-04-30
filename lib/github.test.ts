@@ -5,10 +5,14 @@ const mockListBranches = vi.hoisted(() => vi.fn());
 const mockListTags = vi.hoisted(() => vi.fn());
 const mockGetTree = vi.hoisted(() => vi.fn());
 const mockPaginate = vi.hoisted(() =>
-  vi.fn().mockImplementation(async (fn: (p: unknown) => Promise<{ data: unknown[] }>, params: unknown) => {
-    const result = await fn(params);
-    return result.data;
-  }),
+  vi
+    .fn()
+    .mockImplementation(
+      async (fn: (p: unknown) => Promise<{ data: unknown[] }>, params: unknown) => {
+        const result = await fn(params);
+        return result.data;
+      },
+    ),
 );
 
 vi.mock("@octokit/rest", () => ({
