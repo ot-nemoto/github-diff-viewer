@@ -13,7 +13,13 @@ interface FileSelectorProps {
 
 const LABEL = { left: "比較元（Left）", right: "比較先（Right）" };
 
-function parseGitHubUrl(url: string): FileSpec | null {
+interface ParsedGitHubUrl {
+  owner: string;
+  repo: string;
+  refAndPath: string;
+}
+
+function parseGitHubUrlBase(url: string): ParsedGitHubUrl | null {
   let parsed: URL;
   try {
     parsed = new URL(url);
@@ -21,10 +27,22 @@ function parseGitHubUrl(url: string): FileSpec | null {
     return null;
   }
   if (parsed.hostname !== "github.com") return null;
-  const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|blame|raw)\/([^/]+)\/(.+)$/);
+  const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|blame|raw)\/(.+)$/);
   if (!match) return null;
-  const [, owner, repo, ref, path] = match;
-  return { owner, repo, ref, path };
+  const [, owner, repo, refAndPath] = match;
+  return { owner, repo, refAndPath };
+}
+
+function resolveRefAndPath(refAndPath: string, allRefs: string[]): { ref: string; path: string } {
+  const matched = allRefs
+    .filter((r) => refAndPath === r || refAndPath.startsWith(`${r}/`))
+    .sort((a, b) => b.length - a.length)[0];
+  if (matched && refAndPath.startsWith(`${matched}/`)) {
+    return { ref: matched, path: refAndPath.slice(matched.length + 1) };
+  }
+  const slashIdx = refAndPath.indexOf("/");
+  if (slashIdx === -1) return { ref: refAndPath, path: "" };
+  return { ref: refAndPath.slice(0, slashIdx), path: refAndPath.slice(slashIdx + 1) };
 }
 
 export function FileSelector({ side, value, onChange }: FileSelectorProps) {
@@ -41,11 +59,16 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     onChange({ ...value, [field]: val });
   };
 
-  const handleOwnerRepoChange = (raw: string) => {
-    const parsed = parseGitHubUrl(raw);
-    if (parsed) {
-      setOwnerRepo(`${parsed.owner}/${parsed.repo}`);
-      onChange(parsed);
+  const handleOwnerRepoChange = async (raw: string) => {
+    const base = parseGitHubUrlBase(raw);
+    if (base) {
+      setOwnerRepo(`${base.owner}/${base.repo}`);
+      const token = getToken() ?? undefined;
+      const result = await fetchRefs({ owner: base.owner, repo: base.repo, token });
+      setRefs(result);
+      const allRefs = [...result.branches, ...result.tags];
+      const { ref, path } = resolveRefAndPath(base.refAndPath, allRefs);
+      onChange({ owner: base.owner, repo: base.repo, ref, path });
       return;
     }
     setOwnerRepo(raw);
