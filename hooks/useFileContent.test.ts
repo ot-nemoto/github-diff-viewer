@@ -37,7 +37,7 @@ describe("useFileContent", () => {
     act(() => { result.current.fetch(params); });
     expect(result.current.loading).toBe(true);
 
-    await act(async () => { resolve!({ content: "content", sha: "abc" }); });
+    await act(async () => { resolve?.({ content: "content", sha: "abc" }); });
     expect(result.current.loading).toBe(false);
   });
 

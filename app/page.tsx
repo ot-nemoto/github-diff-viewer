@@ -77,7 +77,7 @@ function ComparePageContent() {
         )}
 
         {hasContent && (
-          <DiffViewer leftContent={leftFile.content!} rightContent={rightFile.content!} />
+          <DiffViewer leftContent={leftFile.content ?? ""} rightContent={rightFile.content ?? ""} />
         )}
       </main>
     </div>
