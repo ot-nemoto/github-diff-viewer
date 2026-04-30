@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GitHub Diff",
+  title: "GitHub Diff Viewer",
   description: "異なる GitHub リポジトリ間でファイルを比較するツール",
 };
 
