@@ -134,9 +134,7 @@ describe("FileSelector", () => {
         target: { value: "https://github.com/ot-nemoto/github-diff/actions/runs/12345" },
       });
     });
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "ファイルの URL を入力してください",
-    );
+    expect(screen.getByRole("alert")).toHaveTextContent("ファイルの URL を入力してください");
   });
 
   test("clears error message when valid file URL is pasted after invalid URL", async () => {
