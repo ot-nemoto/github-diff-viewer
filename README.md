@@ -1,4 +1,4 @@
-# GitHub Diff
+# GitHub Diff Viewer
 
 ![CI](https://github.com/ot-nemoto/github-diff-viewer/actions/workflows/ci.yml/badge.svg)
 ![Version](https://img.shields.io/github/package-json/v/ot-nemoto/github-diff-viewer)
