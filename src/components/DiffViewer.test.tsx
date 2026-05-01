@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { DiffViewer } from "@/components/DiffViewer";
 
 vi.mock("react-diff-viewer-continued", () => ({
@@ -15,23 +15,19 @@ describe("DiffViewer", () => {
     expect(screen.getByTestId("diff-viewer")).toHaveAttribute("data-split-view", "true");
   });
 
-  test("shows Split and Unified toggle buttons", () => {
-    render(<DiffViewer {...defaultProps} />);
-    expect(screen.getByRole("button", { name: "Split" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Unified" })).toBeInTheDocument();
+  test("renders in split mode when splitView=true", () => {
+    render(<DiffViewer {...defaultProps} splitView={true} />);
+    expect(screen.getByTestId("diff-viewer")).toHaveAttribute("data-split-view", "true");
   });
 
-  test("switches to unified mode when Unified button is clicked", () => {
-    render(<DiffViewer {...defaultProps} />);
-    fireEvent.click(screen.getByRole("button", { name: "Unified" }));
+  test("renders in unified mode when splitView=false", () => {
+    render(<DiffViewer {...defaultProps} splitView={false} />);
     expect(screen.getByTestId("diff-viewer")).toHaveAttribute("data-split-view", "false");
   });
 
-  test("switches back to split mode when Split button is clicked", () => {
-    render(<DiffViewer {...defaultProps} />);
-    fireEvent.click(screen.getByRole("button", { name: "Unified" }));
-    fireEvent.click(screen.getByRole("button", { name: "Split" }));
-    expect(screen.getByTestId("diff-viewer")).toHaveAttribute("data-split-view", "true");
+  test("shows file name bar when fileName is provided", () => {
+    render(<DiffViewer {...defaultProps} fileName="index.ts" />);
+    expect(screen.getByText("index.ts")).toBeInTheDocument();
   });
 
   test("passes leftContent and rightContent to diff viewer", () => {
