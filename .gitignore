@@ -11,7 +11,6 @@ build/
 # misc
 .DS_Store
 *.pem
-.mcp.json
 
 # debug
 npm-debug.log*
