@@ -48,9 +48,14 @@ export function TokenSettings() {
             onClick={() => setShowModal(false)}
             aria-label="モーダルを閉じる"
           />
-          <div className="relative bg-white rounded-xl w-[440px] shadow-xl border border-[#d0d7de]">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pat-modal-title"
+            className="relative bg-white rounded-xl w-[440px] shadow-xl border border-[#d0d7de]"
+          >
             <div className="px-4 pt-4 pb-0 flex justify-between items-center">
-              <span className="text-base font-semibold text-[#1f2328]">
+              <span id="pat-modal-title" className="text-base font-semibold text-[#1f2328]">
                 GitHub Personal Access Token
               </span>
               <button
@@ -82,6 +87,7 @@ export function TokenSettings() {
                 type="password"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSave();
                   if (e.key === "Escape") setShowModal(false);
