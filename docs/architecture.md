@@ -131,3 +131,10 @@ left / right の各フィールドを個別のパラメータで表現する。
 フィールドが 1 つでも欠けている場合、その側（left / right）のパラメータは一切セットしない。ref にブランチ名など `/` を含む値も正しく扱える。
 
 モード（Split / Unified）は `app/page.tsx` の state で管理し、`DiffViewer` に `splitView` prop として渡す。URL には含めない。
+
+## Biome 既知の制約と対応パターン
+
+| ルール | 制約 | 対応方針 |
+|--------|------|---------|
+| `noAutofocus` | `autoFocus` 属性は使用不可 | `useRef` + `useEffect` でマウント後にフォーカスを当てる |
+| `noStaticElementInteractions` | `div` 等の非インタラクティブ要素に `onClick` は不可 | クリック可能な要素は `<button>` に変更し `aria-label` を付与する |

@@ -50,8 +50,8 @@ lib/github.test.ts                 ← 同一ディレクトリ
 ### components/
 
 - `FileSelector`: 入力値変更 → コールバック呼び出しの確認、GitHub URL 貼り付けによる全フィールド自動補完
-- `TokenSettings`: トークン保存・クリア操作の確認
-- `DiffViewer`: Split / Unified 切替・差分レンダリングの確認
+- `TokenSettings`: トークン保存・クリア操作、モーダル開閉（ボタンクリック・オーバーレイクリック・Escape キー）、Enter キーによる保存の確認
+- `DiffViewer`: `splitView` prop による Split / Unified 切替、`fileName` prop によるファイル名バー表示の確認
 
 ## テスト設計の原則
 
