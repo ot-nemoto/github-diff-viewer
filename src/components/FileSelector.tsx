@@ -12,7 +12,7 @@ interface FileSelectorProps {
 }
 
 const BADGE = {
-  left:  { bg: "bg-[#0550ae]", label: "L" },
+  left: { bg: "bg-[#0550ae]", label: "L" },
   right: { bg: "bg-[#1a7f37]", label: "R" },
 };
 const HEADER_LABEL = { left: "比較元 (Left)", right: "比較先 (Right)" };
@@ -125,14 +125,19 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
   return (
     <div className="bg-white border border-[#d0d7de] rounded-md overflow-hidden">
       <div className="px-3.5 py-2.5 border-b border-[#e8ebee] flex items-center gap-2">
-        <span className={`w-[22px] h-[22px] rounded flex items-center justify-center text-[11px] font-bold text-white ${badge.bg}`}>
+        <span
+          className={`w-[22px] h-[22px] rounded flex items-center justify-center text-[11px] font-bold text-white ${badge.bg}`}
+        >
           {badge.label}
         </span>
         <span className="text-sm font-semibold text-[#1f2328]">{HEADER_LABEL[side]}</span>
       </div>
       <div className="px-3.5 py-3 space-y-2.5">
         <div>
-          <label htmlFor={`${side}-owner-repo`} className="block text-xs font-medium text-[#636c76] mb-1">
+          <label
+            htmlFor={`${side}-owner-repo`}
+            className="block text-xs font-medium text-[#636c76] mb-1"
+          >
             Owner / Repository
           </label>
           <input

@@ -9,7 +9,12 @@ interface DiffViewerProps {
   fileName?: string;
 }
 
-export function DiffViewer({ leftContent, rightContent, splitView = true, fileName }: DiffViewerProps) {
+export function DiffViewer({
+  leftContent,
+  rightContent,
+  splitView = true,
+  fileName,
+}: DiffViewerProps) {
   return (
     <div className="border border-[#d0d7de] rounded-md overflow-hidden">
       {fileName && (
@@ -18,11 +23,7 @@ export function DiffViewer({ leftContent, rightContent, splitView = true, fileNa
         </div>
       )}
       <div className="overflow-auto text-sm">
-        <ReactDiffViewer
-          oldValue={leftContent}
-          newValue={rightContent}
-          splitView={splitView}
-        />
+        <ReactDiffViewer oldValue={leftContent} newValue={rightContent} splitView={splitView} />
       </div>
     </div>
   );
