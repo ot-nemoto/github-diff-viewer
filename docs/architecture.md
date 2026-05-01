@@ -16,26 +16,27 @@
 
 ```
 /
-├── app/
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── DiffViewer.tsx
-│   ├── DiffViewer.test.tsx
-│   ├── FileSelector.tsx
-│   ├── FileSelector.test.tsx
-│   ├── TokenSettings.tsx
-│   └── TokenSettings.test.tsx
-├── hooks/
-│   ├── useFileContent.ts
-│   ├── useFileContent.test.ts
-│   ├── useQueryParams.ts
-│   └── useQueryParams.test.ts
-├── lib/
-│   ├── github.ts
-│   ├── github.test.ts
-│   ├── storage.ts
-│   └── storage.test.ts
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── DiffViewer.tsx
+│   │   ├── DiffViewer.test.tsx
+│   │   ├── FileSelector.tsx
+│   │   ├── FileSelector.test.tsx
+│   │   ├── TokenSettings.tsx
+│   │   └── TokenSettings.test.tsx
+│   ├── hooks/
+│   │   ├── useFileContent.ts
+│   │   ├── useFileContent.test.ts
+│   │   ├── useQueryParams.ts
+│   │   └── useQueryParams.test.ts
+│   └── lib/
+│       ├── github.ts
+│       ├── github.test.ts
+│       ├── storage.ts
+│       └── storage.test.ts
 ├── docs/
 ├── public/
 ├── next.config.ts
