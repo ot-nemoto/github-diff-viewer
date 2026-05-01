@@ -52,7 +52,7 @@ export function TokenSettings() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="pat-modal-title"
-            className="relative bg-white rounded-xl w-[440px] shadow-xl border border-[#d0d7de]"
+            className="relative bg-white rounded-xl w-full max-w-[440px] mx-4 shadow-xl border border-[#d0d7de]"
           >
             <div className="px-4 pt-4 pb-0 flex justify-between items-center">
               <span id="pat-modal-title" className="text-base font-semibold text-[#1f2328]">
