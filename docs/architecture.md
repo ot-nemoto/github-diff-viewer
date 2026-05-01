@@ -130,4 +130,4 @@ left / right の各フィールドを個別のパラメータで表現する。
 
 フィールドが 1 つでも欠けている場合、その側（left / right）のパラメータは一切セットしない。ref にブランチ名など `/` を含む値も正しく扱える。
 
-モード（Split / Unified）はコンポーネント内部の state で管理し、URL には含めない。
+モード（Split / Unified）は `app/page.tsx` の state で管理し、`DiffViewer` に `splitView` prop として渡す。URL には含めない。
