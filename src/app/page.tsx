@@ -11,6 +11,11 @@ function ComparePageContent() {
   const { state, update } = useQueryParams();
   const [localState, setLocalState] = useState(state);
   const [mode, setMode] = useState<"split" | "unified">("split");
+  const [displayedPaths, setDisplayedPaths] = useState<{ left: string; right: string } | null>(
+    isReady(state.left) && isReady(state.right)
+      ? { left: state.left.path, right: state.right.path }
+      : null,
+  );
   const leftFile = useFileContent();
   const rightFile = useFileContent();
   const initialFetchDone = useRef(false);
@@ -22,7 +27,9 @@ function ComparePageContent() {
     s.owner.trim() !== "" && s.repo.trim() !== "" && s.ref.trim() !== "" && s.path.trim() !== "";
   const canCompare = !isLoading && isReady(localState.left) && isReady(localState.right);
 
-  const fileName = localState.left.path.split("/").pop() ?? "";
+  const leftName = displayedPaths?.left.split("/").pop() ?? "";
+  const rightName = displayedPaths?.right.split("/").pop() ?? "";
+  const fileName = leftName === rightName ? leftName : `${leftName} / ${rightName}`;
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run once on mount
   useEffect(() => {
@@ -34,6 +41,7 @@ function ComparePageContent() {
 
   const handleCompare = async () => {
     update(localState);
+    setDisplayedPaths({ left: localState.left.path, right: localState.right.path });
     await Promise.all([leftFile.fetch(localState.left), rightFile.fetch(localState.right)]);
   };
 
