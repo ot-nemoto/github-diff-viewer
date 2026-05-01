@@ -65,4 +65,20 @@ describe("TokenSettings", () => {
     expect(mockClearToken).toHaveBeenCalled();
     expect(screen.getByRole("button", { name: /PAT を設定/ })).toBeInTheDocument();
   });
+
+  test("closes modal when Escape key is pressed in input", () => {
+    render(<TokenSettings />);
+    fireEvent.click(screen.getByRole("button", { name: /PAT を設定/ }));
+    const input = screen.getByPlaceholderText("GitHub Personal Access Token");
+    fireEvent.keyDown(input, { key: "Escape" });
+    expect(screen.queryByPlaceholderText("GitHub Personal Access Token")).not.toBeInTheDocument();
+  });
+
+  test("closes modal when overlay is clicked", () => {
+    render(<TokenSettings />);
+    fireEvent.click(screen.getByRole("button", { name: /PAT を設定/ }));
+    expect(screen.getByPlaceholderText("GitHub Personal Access Token")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "モーダルを閉じる" }));
+    expect(screen.queryByPlaceholderText("GitHub Personal Access Token")).not.toBeInTheDocument();
+  });
 });
