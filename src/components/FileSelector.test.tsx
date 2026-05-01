@@ -14,12 +14,12 @@ const ownerRepoPlaceholder = "owner/repository または GitHub URL";
 describe("FileSelector", () => {
   test("renders label for left side", () => {
     render(<FileSelector side="left" value={defaultValue} onChange={() => {}} />);
-    expect(screen.getByText("比較元（Left）")).toBeInTheDocument();
+    expect(screen.getByText("比較元 (Left)")).toBeInTheDocument();
   });
 
   test("renders label for right side", () => {
     render(<FileSelector side="right" value={defaultValue} onChange={() => {}} />);
-    expect(screen.getByText("比較先（Right）")).toBeInTheDocument();
+    expect(screen.getByText("比較先 (Right)")).toBeInTheDocument();
   });
 
   test("displays owner/repo combined in input", () => {
