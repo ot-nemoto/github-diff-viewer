@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { clearToken, getToken, setToken } from "@/lib/storage";
 
 export function TokenSettings() {
   const [hasToken, setHasToken] = useState(false);
   const [input, setInput] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showModal) inputRef.current?.focus();
+  }, [showModal]);
 
   useEffect(() => {
     setHasToken(!!getToken());
@@ -84,10 +89,10 @@ export function TokenSettings() {
                 ）を使用してください。プライベートリポジトリへのアクセスに必要です。パブリックリポジトリのみの場合は不要です。
               </p>
               <input
+                ref={inputRef}
                 type="password"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSave();
                   if (e.key === "Escape") setShowModal(false);

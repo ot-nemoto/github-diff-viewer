@@ -5,7 +5,11 @@ import { DiffViewer } from "@/components/DiffViewer";
 import { FileSelector } from "@/components/FileSelector";
 import { TokenSettings } from "@/components/TokenSettings";
 import { useFileContent } from "@/hooks/useFileContent";
+import type { FileSpec } from "@/hooks/useQueryParams";
 import { useQueryParams } from "@/hooks/useQueryParams";
+
+const isReady = (s: FileSpec) =>
+  s.owner.trim() !== "" && s.repo.trim() !== "" && s.ref.trim() !== "" && s.path.trim() !== "";
 
 function ComparePageContent() {
   const { state, update } = useQueryParams();
@@ -22,9 +26,6 @@ function ComparePageContent() {
 
   const isLoading = leftFile.loading || rightFile.loading;
   const hasContent = leftFile.content !== null && rightFile.content !== null;
-
-  const isReady = (s: typeof localState.left) =>
-    s.owner.trim() !== "" && s.repo.trim() !== "" && s.ref.trim() !== "" && s.path.trim() !== "";
   const canCompare = !isLoading && isReady(localState.left) && isReady(localState.right);
 
   const leftName = displayedPaths?.left.split("/").pop() ?? "";
