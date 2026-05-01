@@ -44,7 +44,7 @@ export function TokenSettings() {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <button
             type="button"
-            className="absolute inset-0 bg-[#010409]/50 cursor-default"
+            className="absolute inset-0 bg-[#010409]/50 cursor-pointer"
             onClick={() => setShowModal(false)}
             aria-label="モーダルを閉じる"
           />
