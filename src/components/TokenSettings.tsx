@@ -1,40 +1,67 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { type GitHubError, validateToken } from "@/lib/github";
 import { clearToken, getToken, setToken } from "@/lib/storage";
+
+type ValidationState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; login: string }
+  | { status: "error"; message: string };
 
 export function TokenSettings() {
   const [hasToken, setHasToken] = useState(false);
-  const [input, setInput] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [input, setInput] = useState("");
+  const [validation, setValidation] = useState<ValidationState>({ status: "idle" });
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (showModal) inputRef.current?.focus();
-  }, [showModal]);
 
   useEffect(() => {
     setHasToken(!!getToken());
   }, []);
 
-  const handleSave = () => {
+  useEffect(() => {
+    if (showModal) {
+      setInput(getToken() ?? "");
+      setValidation({ status: "idle" });
+      inputRef.current?.focus();
+    }
+  }, [showModal]);
+
+  const handleVerify = async () => {
     if (!input.trim()) return;
-    setToken(input.trim());
-    setHasToken(true);
+    setValidation({ status: "loading" });
+    try {
+      const { login } = await validateToken(input.trim());
+      setToken(input.trim());
+      setHasToken(true);
+      setValidation({ status: "success", login });
+    } catch (e) {
+      const message = (e as GitHubError).message ?? "トークンの検証に失敗しました";
+      setValidation({ status: "error", message });
+    }
+  };
+
+  const handleDelete = () => {
+    clearToken();
+    setHasToken(false);
     setInput("");
+    setValidation({ status: "idle" });
     setShowModal(false);
   };
 
-  const handleClear = () => {
-    clearToken();
-    setHasToken(false);
+  const handleClose = () => {
+    setShowModal(false);
   };
+
+  const isVerifying = validation.status === "loading";
 
   return (
     <>
       <button
         type="button"
-        onClick={() => (hasToken ? handleClear() : setShowModal(true))}
+        onClick={() => setShowModal(true)}
         className="flex items-center gap-1.5 bg-white/[.08] border border-white/15 rounded-md text-sm px-3 py-1.5 hover:bg-white/[.12] transition-colors"
         style={{ color: hasToken ? "#3fb950" : "#e6edf3" }}
       >
@@ -50,7 +77,7 @@ export function TokenSettings() {
           <button
             type="button"
             className="absolute inset-0 bg-[#010409]/50 cursor-pointer"
-            onClick={() => setShowModal(false)}
+            onClick={handleClose}
             aria-label="モーダルを閉じる"
           />
           <div
@@ -65,7 +92,7 @@ export function TokenSettings() {
               </span>
               <button
                 type="button"
-                onClick={() => setShowModal(false)}
+                onClick={handleClose}
                 className="text-[#636c76] hover:text-[#1f2328] transition-colors"
                 aria-label="閉じる"
               >
@@ -94,12 +121,18 @@ export function TokenSettings() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSave();
-                  if (e.key === "Escape") setShowModal(false);
+                  if (e.key === "Enter") handleVerify();
+                  if (e.key === "Escape") handleClose();
                 }}
                 placeholder="GitHub Personal Access Token"
                 className="w-full px-3 py-2 border border-[#d0d7de] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0969da]/20 focus:border-[#0969da]"
               />
+              {validation.status === "success" && (
+                <p className="mt-2 text-sm text-[#1a7f37]">✓ @{validation.login}</p>
+              )}
+              {validation.status === "error" && (
+                <p className="mt-2 text-sm text-[#cf222e]">{validation.message}</p>
+              )}
             </div>
             <div className="px-4 pb-4 flex justify-end items-center gap-2">
               <a
@@ -110,12 +143,22 @@ export function TokenSettings() {
               >
                 トークンを発行する →
               </a>
+              {hasToken && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="px-4 py-1.5 bg-white text-[#cf222e] rounded-md text-sm font-semibold hover:bg-[#fff0ee] border border-[#f5c6c6] transition-colors"
+                >
+                  削除
+                </button>
+              )}
               <button
                 type="button"
-                onClick={handleSave}
-                className="px-4 py-1.5 bg-[#0969da] text-white rounded-md text-sm font-semibold hover:bg-[#0860ca] border border-black/10 transition-colors"
+                onClick={handleVerify}
+                disabled={!input.trim() || isVerifying}
+                className="px-4 py-1.5 bg-[#0969da] text-white rounded-md text-sm font-semibold hover:bg-[#0860ca] disabled:opacity-50 disabled:cursor-not-allowed border border-black/10 transition-colors"
               >
-                保存
+                {isVerifying ? "検証中..." : "検証"}
               </button>
             </div>
           </div>

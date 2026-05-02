@@ -28,6 +28,24 @@ export interface RefsResult {
   tags: string[];
 }
 
+export interface TokenUser {
+  login: string;
+}
+
+export async function validateToken(token: string): Promise<TokenUser> {
+  const octokit = new Octokit({ auth: token });
+  try {
+    const response = await octokit.users.getAuthenticated();
+    return { login: response.data.login };
+  } catch (error: unknown) {
+    const status = getStatus(error);
+    if (status === 401) {
+      throw new GitHubError("トークンが無効です", 401);
+    }
+    throw new GitHubError("トークンの検証に失敗しました", 500);
+  }
+}
+
 export async function fetchRefs(
   params: Pick<FileParams, "owner" | "repo" | "token">,
 ): Promise<RefsResult> {

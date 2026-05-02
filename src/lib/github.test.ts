@@ -1,9 +1,10 @@
-import { fetchFileContent, fetchRefs, fetchTree } from "./github";
+import { fetchFileContent, fetchRefs, fetchTree, validateToken } from "./github";
 
 const mockGetContent = vi.hoisted(() => vi.fn());
 const mockListBranches = vi.hoisted(() => vi.fn());
 const mockListTags = vi.hoisted(() => vi.fn());
 const mockGetTree = vi.hoisted(() => vi.fn());
+const mockGetAuthenticated = vi.hoisted(() => vi.fn());
 const mockPaginate = vi.hoisted(() =>
   vi
     .fn()
@@ -28,9 +29,53 @@ vi.mock("@octokit/rest", () => ({
       git: {
         getTree: mockGetTree,
       },
+      users: {
+        getAuthenticated: mockGetAuthenticated,
+      },
     };
   }),
 }));
+
+describe("validateToken", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test("returns login on success", async () => {
+    mockGetAuthenticated.mockResolvedValue({ data: { login: "octocat" } });
+
+    const result = await validateToken("ghp_valid");
+
+    expect(result.login).toBe("octocat");
+  });
+
+  test("passes token to Octokit", async () => {
+    const { Octokit } = await import("@octokit/rest");
+    mockGetAuthenticated.mockResolvedValue({ data: { login: "octocat" } });
+
+    await validateToken("ghp_secret");
+
+    expect(vi.mocked(Octokit)).toHaveBeenCalledWith({ auth: "ghp_secret" });
+  });
+
+  test("throws GitHubError with status 401 on invalid token", async () => {
+    mockGetAuthenticated.mockRejectedValue({ status: 401 });
+
+    await expect(validateToken("ghp_invalid")).rejects.toMatchObject({
+      status: 401,
+      message: "トークンが無効です",
+    });
+  });
+
+  test("throws GitHubError with status 500 on unexpected error", async () => {
+    mockGetAuthenticated.mockRejectedValue(new Error("network error"));
+
+    await expect(validateToken("ghp_token")).rejects.toMatchObject({
+      status: 500,
+      message: "トークンの検証に失敗しました",
+    });
+  });
+});
 
 describe("fetchFileContent", () => {
   beforeEach(() => {
