@@ -42,6 +42,9 @@ export async function validateToken(token: string): Promise<TokenUser> {
     if (status === 401) {
       throw new GitHubError("トークンが無効です", 401);
     }
+    if (status !== null) {
+      throw new GitHubError("トークンの検証に失敗しました", status);
+    }
     throw new GitHubError("トークンの検証に失敗しました", 500);
   }
 }

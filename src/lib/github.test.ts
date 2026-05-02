@@ -75,6 +75,15 @@ describe("validateToken", () => {
       message: "トークンの検証に失敗しました",
     });
   });
+
+  test("preserves original status code on non-401 HTTP error", async () => {
+    mockGetAuthenticated.mockRejectedValue({ status: 403 });
+
+    await expect(validateToken("ghp_token")).rejects.toMatchObject({
+      status: 403,
+      message: "トークンの検証に失敗しました",
+    });
+  });
 });
 
 describe("fetchFileContent", () => {
