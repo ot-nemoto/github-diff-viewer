@@ -116,6 +116,7 @@ export function TokenSettings() {
                       if (e.key === "Escape") handleClose();
                     }}
                     placeholder="ghp_xxxxxxxxxxxx"
+                    aria-label="GitHub Personal Access Token"
                     className="flex-1 px-3 py-1.5 border border-[#d0d7de] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0969da] focus:border-[#0969da]"
                   />
                   <button
