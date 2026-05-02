@@ -14,12 +14,12 @@ const ownerRepoPlaceholder = "owner/repository または GitHub URL";
 describe("FileSelector", () => {
   test("renders label for left side", () => {
     render(<FileSelector side="left" value={defaultValue} onChange={() => {}} />);
-    expect(screen.getByText("比較元（Left）")).toBeInTheDocument();
+    expect(screen.getByText("比較元 (Left)")).toBeInTheDocument();
   });
 
   test("renders label for right side", () => {
     render(<FileSelector side="right" value={defaultValue} onChange={() => {}} />);
-    expect(screen.getByText("比較先（Right）")).toBeInTheDocument();
+    expect(screen.getByText("比較先 (Right)")).toBeInTheDocument();
   });
 
   test("displays owner/repo combined in input", () => {
@@ -131,7 +131,7 @@ describe("FileSelector", () => {
     render(<FileSelector side="left" value={defaultValue} onChange={() => {}} />);
     await act(async () => {
       fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-        target: { value: "https://github.com/ot-nemoto/github-diff/actions/runs/12345" },
+        target: { value: "https://github.com/ot-nemoto/github-diff-viewer/actions/runs/12345" },
       });
     });
     expect(screen.getByRole("alert")).toHaveTextContent("ファイルの URL を入力してください");
@@ -142,7 +142,7 @@ describe("FileSelector", () => {
     render(<FileSelector side="left" value={defaultValue} onChange={onChange} />);
     await act(async () => {
       fireEvent.change(screen.getByPlaceholderText(ownerRepoPlaceholder), {
-        target: { value: "https://github.com/ot-nemoto/github-diff/actions/runs/12345" },
+        target: { value: "https://github.com/ot-nemoto/github-diff-viewer/actions/runs/12345" },
       });
     });
     expect(screen.getByRole("alert")).toBeInTheDocument();

@@ -11,7 +11,11 @@ interface FileSelectorProps {
   onChange: (value: FileSpec) => void;
 }
 
-const LABEL = { left: "比較元（Left）", right: "比較先（Right）" };
+const BADGE = {
+  left: { bg: "bg-[#0550ae]", label: "L" },
+  right: { bg: "bg-[#1a7f37]", label: "R" },
+};
+const HEADER_LABEL = { left: "比較元 (Left)", right: "比較先 (Right)" };
 
 interface ParsedGitHubUrl {
   owner: string;
@@ -116,71 +120,85 @@ export function FileSelector({ side, value, onChange }: FileSelectorProps) {
     setFiles(result);
   };
 
+  const badge = BADGE[side];
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
-      <h2 className="text-sm font-semibold text-gray-700">{LABEL[side]}</h2>
-      <div>
-        <label htmlFor={`${side}-owner-repo`} className="block text-xs text-gray-500 mb-1">
-          Owner / Repository
-        </label>
-        <input
-          id={`${side}-owner-repo`}
-          type="text"
-          value={ownerRepo}
-          placeholder="owner/repository または GitHub URL"
-          className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          aria-invalid={!!urlError}
-          aria-describedby={urlError ? `${side}-url-error` : undefined}
-          onChange={(e) => handleOwnerRepoChange(e.target.value)}
-          onBlur={handleOwnerRepoBlur}
-        />
-        {urlError && (
-          <p id={`${side}-url-error`} role="alert" className="mt-1 text-xs text-red-600">
-            {urlError}
-          </p>
-        )}
+    <div className="bg-white border border-[#d0d7de] rounded-md overflow-hidden">
+      <div className="px-3.5 py-2.5 border-b border-[#e8ebee] flex items-center gap-2">
+        <span
+          className={`w-[22px] h-[22px] rounded flex items-center justify-center text-[11px] font-bold text-white ${badge.bg}`}
+        >
+          {badge.label}
+        </span>
+        <span className="text-sm font-semibold text-[#1f2328]">{HEADER_LABEL[side]}</span>
       </div>
-      <div>
-        <label htmlFor={`${side}-ref`} className="block text-xs text-gray-500 mb-1">
-          Ref（ブランチ / タグ / コミット）
-        </label>
-        <input
-          id={`${side}-ref`}
-          type="text"
-          value={value.ref}
-          placeholder="main"
-          list={`refs-${side}`}
-          className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => update("ref", e.target.value)}
-          onBlur={handleRefBlur}
-        />
-        <datalist id={`refs-${side}`}>
-          {refs.branches.map((b) => (
-            <option key={`branch-${b}`} value={b} label={`branch: ${b}`} />
-          ))}
-          {refs.tags.map((t) => (
-            <option key={`tag-${t}`} value={t} label={`tag: ${t}`} />
-          ))}
-        </datalist>
-      </div>
-      <div>
-        <label htmlFor={`${side}-path`} className="block text-xs text-gray-500 mb-1">
-          File Path
-        </label>
-        <input
-          id={`${side}-path`}
-          type="text"
-          value={value.path}
-          placeholder="src/index.ts"
-          list={`files-${side}`}
-          className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onChange={(e) => update("path", e.target.value)}
-        />
-        <datalist id={`files-${side}`}>
-          {files.map((f) => (
-            <option key={f} value={f} />
-          ))}
-        </datalist>
+      <div className="px-3.5 py-3 space-y-2.5">
+        <div>
+          <label
+            htmlFor={`${side}-owner-repo`}
+            className="block text-xs font-medium text-[#636c76] mb-1"
+          >
+            Owner / Repository
+          </label>
+          <input
+            id={`${side}-owner-repo`}
+            type="text"
+            value={ownerRepo}
+            placeholder="owner/repository または GitHub URL"
+            className="w-full px-2.5 py-1.5 text-sm border border-[#d0d7de] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0969da]/20 focus:border-[#0969da]"
+            aria-invalid={!!urlError}
+            aria-describedby={urlError ? `${side}-url-error` : undefined}
+            onChange={(e) => handleOwnerRepoChange(e.target.value)}
+            onBlur={handleOwnerRepoBlur}
+          />
+          {urlError && (
+            <p id={`${side}-url-error`} role="alert" className="mt-1 text-xs text-red-600">
+              {urlError}
+            </p>
+          )}
+        </div>
+        <div>
+          <label htmlFor={`${side}-ref`} className="block text-xs font-medium text-[#636c76] mb-1">
+            Ref（ブランチ / タグ / コミット）
+          </label>
+          <input
+            id={`${side}-ref`}
+            type="text"
+            value={value.ref}
+            placeholder="main"
+            list={`refs-${side}`}
+            className="w-full px-2.5 py-1.5 text-sm border border-[#d0d7de] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0969da]/20 focus:border-[#0969da]"
+            onChange={(e) => update("ref", e.target.value)}
+            onBlur={handleRefBlur}
+          />
+          <datalist id={`refs-${side}`}>
+            {refs.branches.map((b) => (
+              <option key={`branch-${b}`} value={b} label={`branch: ${b}`} />
+            ))}
+            {refs.tags.map((t) => (
+              <option key={`tag-${t}`} value={t} label={`tag: ${t}`} />
+            ))}
+          </datalist>
+        </div>
+        <div>
+          <label htmlFor={`${side}-path`} className="block text-xs font-medium text-[#636c76] mb-1">
+            File Path
+          </label>
+          <input
+            id={`${side}-path`}
+            type="text"
+            value={value.path}
+            placeholder="src/index.ts"
+            list={`files-${side}`}
+            className="w-full px-2.5 py-1.5 text-sm border border-[#d0d7de] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0969da]/20 focus:border-[#0969da]"
+            onChange={(e) => update("path", e.target.value)}
+          />
+          <datalist id={`files-${side}`}>
+            {files.map((f) => (
+              <option key={f} value={f} />
+            ))}
+          </datalist>
+        </div>
       </div>
     </div>
   );
