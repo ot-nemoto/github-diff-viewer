@@ -62,21 +62,16 @@ export function TokenSettings() {
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="flex items-center gap-1.5 bg-white/[.08] border border-white/15 rounded-md text-sm px-3 py-1.5 hover:bg-white/[.12] transition-colors"
-        style={{ color: hasToken ? "#3fb950" : "#e6edf3" }}
+        className="bg-white border border-[#d0d7de] rounded-md text-sm px-3 py-1 text-[#1f2328] hover:bg-[#f6f8fa] transition-colors"
       >
-        {/* Key icon */}
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-          <path d="M6.5 0a6.5 6.5 0 0 1 5.25 10.354l3.45 3.449a.75.75 0 1 1-1.06 1.06l-3.45-3.449A6.5 6.5 0 1 1 6.5 0zm0 1.5a5 5 0 1 0 0 10 5 5 0 0 0 0-10z" />
-        </svg>
-        {hasToken ? "PAT 設定済み" : "PAT を設定"}
+        設定
       </button>
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <button
             type="button"
-            className="absolute inset-0 bg-[#010409]/50 cursor-pointer"
+            className="absolute inset-0 bg-black/40 cursor-pointer"
             onClick={handleClose}
             aria-label="モーダルを閉じる"
           />
@@ -84,17 +79,17 @@ export function TokenSettings() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="pat-modal-title"
-            className="relative bg-white rounded-xl w-full max-w-[440px] mx-4 shadow-xl border border-[#d0d7de]"
+            className="relative bg-[#f6f8fa] rounded-lg w-full max-w-2xl mx-4 shadow-xl border border-[#d0d7de]"
           >
-            <div className="px-4 pt-4 pb-0 flex justify-between items-center">
-              <span id="pat-modal-title" className="text-base font-semibold text-[#1f2328]">
-                GitHub Personal Access Token
-              </span>
+            <div className="px-5 py-4 border-b border-[#d0d7de] flex justify-between items-center">
+              <h2 id="pat-modal-title" className="text-base font-semibold text-[#1f2328]">
+                設定
+              </h2>
               <button
                 type="button"
                 onClick={handleClose}
                 className="text-[#636c76] hover:text-[#1f2328] transition-colors"
-                aria-label="閉じる"
+                aria-label="設定を閉じる"
               >
                 <svg
                   width="16"
@@ -107,59 +102,60 @@ export function TokenSettings() {
                 </svg>
               </button>
             </div>
-            <div className="p-4">
-              <p className="text-sm text-[#636c76] mb-3 leading-relaxed">
-                Classic PAT（スコープ:{" "}
-                <code className="bg-[#f6f8fa] border border-[#d0d7de] rounded px-1 text-xs">
-                  repo
-                </code>
-                ）を使用してください。プライベートリポジトリへのアクセスに必要です。パブリックリポジトリのみの場合は不要です。
-              </p>
-              <input
-                ref={inputRef}
-                type="password"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleVerify();
-                  if (e.key === "Escape") handleClose();
-                }}
-                placeholder="GitHub Personal Access Token"
-                className="w-full px-3 py-2 border border-[#d0d7de] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0969da]/20 focus:border-[#0969da]"
-              />
-              {validation.status === "success" && (
-                <p className="mt-2 text-sm text-[#1a7f37]">✓ @{validation.login}</p>
-              )}
-              {validation.status === "error" && (
-                <p className="mt-2 text-sm text-[#cf222e]">{validation.message}</p>
-              )}
-            </div>
-            <div className="px-4 pb-4 flex justify-end items-center gap-2">
-              <a
-                href="https://github.com/settings/tokens/new?scopes=repo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-[#0969da] mr-auto"
-              >
-                トークンを発行する →
-              </a>
-              {hasToken && (
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="px-4 py-1.5 bg-white text-[#cf222e] rounded-md text-sm font-semibold hover:bg-[#fff0ee] border border-[#f5c6c6] transition-colors"
-                >
-                  削除
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={handleVerify}
-                disabled={!input.trim() || isVerifying}
-                className="px-4 py-1.5 bg-[#0969da] text-white rounded-md text-sm font-semibold hover:bg-[#0860ca] disabled:opacity-50 disabled:cursor-not-allowed border border-black/10 transition-colors"
-              >
-                {isVerifying ? "検証中..." : "検証"}
-              </button>
+            <div className="p-5 space-y-4">
+              <div className="bg-white rounded-md border border-[#d0d7de] p-5">
+                <p className="text-sm font-semibold text-[#1f2328] mb-3">GitHub Token</p>
+                <div className="flex gap-2">
+                  <input
+                    ref={inputRef}
+                    type="password"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleVerify();
+                      if (e.key === "Escape") handleClose();
+                    }}
+                    placeholder="ghp_xxxxxxxxxxxx"
+                    className="flex-1 px-3 py-1.5 border border-[#d0d7de] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0969da] focus:border-[#0969da]"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerify}
+                    disabled={!input.trim() || isVerifying}
+                    className="px-4 py-1.5 bg-[#0969da] text-white rounded-md text-sm font-semibold hover:bg-[#0860ca] disabled:opacity-50 disabled:cursor-not-allowed border border-black/10 transition-colors"
+                  >
+                    {isVerifying ? "検証中..." : "検証"}
+                  </button>
+                  {hasToken && (
+                    <button
+                      type="button"
+                      onClick={handleDelete}
+                      className="px-4 py-1.5 bg-white text-[#cf222e] rounded-md text-sm font-semibold hover:bg-[#ffebe9] hover:border-[#cf222e] border border-[#d0d7de] transition-colors"
+                    >
+                      削除
+                    </button>
+                  )}
+                </div>
+                {validation.status === "success" && (
+                  <p className="mt-2 text-sm text-[#1a7f37]">✓ @{validation.login} として認証済み</p>
+                )}
+                {validation.status === "error" && (
+                  <p className="mt-2 text-sm text-[#cf222e]">✗ {validation.message}</p>
+                )}
+                <p className="mt-3 text-xs text-[#636c76] leading-relaxed">
+                  Classic PAT（スコープ:{" "}
+                  <code className="bg-[#f6f8fa] border border-[#d0d7de] rounded px-1">repo</code>
+                  ）を使用してください。プライベートリポジトリへのアクセスに必要です。パブリックリポジトリのみの場合は不要です。{" "}
+                  <a
+                    href="https://github.com/settings/tokens/new?scopes=repo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#0969da]"
+                  >
+                    トークンを発行する →
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
