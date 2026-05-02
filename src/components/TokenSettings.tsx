@@ -137,7 +137,9 @@ export function TokenSettings() {
                   )}
                 </div>
                 {validation.status === "success" && (
-                  <p className="mt-2 text-sm text-[#1a7f37]">✓ @{validation.login} として認証済み</p>
+                  <p className="mt-2 text-sm text-[#1a7f37]">
+                    ✓ @{validation.login} として認証済み
+                  </p>
                 )}
                 {validation.status === "error" && (
                   <p className="mt-2 text-sm text-[#cf222e]">✗ {validation.message}</p>
