@@ -130,7 +130,8 @@ export function TokenSettings() {
                     <button
                       type="button"
                       onClick={handleDelete}
-                      className="px-4 py-1.5 bg-white text-[#cf222e] rounded-md text-sm font-semibold hover:bg-[#ffebe9] hover:border-[#cf222e] border border-[#d0d7de] transition-colors"
+                      disabled={isVerifying}
+                      className="px-4 py-1.5 bg-white text-[#cf222e] rounded-md text-sm font-semibold hover:bg-[#ffebe9] hover:border-[#cf222e] border border-[#d0d7de] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       削除
                     </button>
