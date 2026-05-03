@@ -25,3 +25,7 @@
 | T7 | Phase 3 | `DiffViewer` コンポーネント実装（Split / Unified 切替） |
 | T8 | Phase 4 | 比較画面（`app/page.tsx`）組み立て・URL クエリ連携 |
 | T9 | Phase 5 | GitHub Pages デプロイ設定・`npm run deploy` 整備 |
+| T16 | - | GitHub Actions の Node.js 20 非推奨警告を解消 |
+| T17 | - | ソースディレクトリを `src/` 配下に移動 |
+| T18 | - | UI リデザイン（GitHub 風ダークヘッダー・カードレイアウト） |
+| T19 | - | ドキュメントを T16〜T18 の実装内容に合わせて更新 |
