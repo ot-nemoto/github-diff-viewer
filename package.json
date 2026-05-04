@@ -15,8 +15,8 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@octokit/rest": "^21.0.2",
-    "next": "^15.3.2",
+    "@octokit/rest": "^22.0.1",
+    "next": "^16.2.4",
     "react": "^19.2.5",
     "react-diff-viewer-continued": "^4.2.2",
     "react-dom": "^19.2.5"
