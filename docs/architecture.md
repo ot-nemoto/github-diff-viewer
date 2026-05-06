@@ -4,7 +4,7 @@
 
 | 用途 | 技術 |
 |------|------|
-| フレームワーク | Next.js 15（App Router） |
+| フレームワーク | Next.js 16（App Router） |
 | 言語 | TypeScript |
 | スタイリング | Tailwind CSS |
 | Formatter / Linter | Biome |
