@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
-    "next": "^16.2.4",
-    "react": "^19.2.5",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
     "react-diff-viewer-continued": "^4.2.2",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.14",
