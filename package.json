@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
-    "next": "^16.2.7",
+    "next": "^16.2.9",
     "react": "^19.2.7",
     "react-diff-viewer-continued": "^4.2.2",
     "react-dom": "^19.2.7"
