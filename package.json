@@ -1,8 +1,9 @@
 {
   "name": "github-diff-viewer",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
+    "prepare": "biome migrate --write",
     "dev": "next dev --turbopack",
     "build": "next build",
     "build:static": "BUILD_MODE=static next build",
