@@ -31,7 +31,7 @@ npm run build:static
 
 ## デプロイ手順（GitHub Pages）
 
-デプロイは GitHub Actions（`.github/workflows/deploy-github-pages.yml`）が自動で行う。`master` ブランチへのマージをトリガーに `npm run build:static` を実行し、生成した `out/` を GitHub Pages へ配置する。
+デプロイは GitHub Actions（`.github/workflows/deploy-github-pages.yml`）が自動で行う。`develop` ブランチへの push をトリガーに `npm run build:static` を実行し、生成した `out/` を GitHub Pages（Actions アーティファクト経由）へ配置する。
 
 手動デプロイは不要。
 
