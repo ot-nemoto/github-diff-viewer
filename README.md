@@ -22,13 +22,9 @@
 | ドキュメント | 内容 |
 |------------|------|
 | [docs/product.md](docs/product.md) | 目的・対象ユーザー・成功指標 |
-| [docs/requirements.md](docs/requirements.md) | 機能要件・非機能要件 |
-| [docs/architecture.md](docs/architecture.md) | 技術スタック・構成・実装方針 |
-| [docs/ui.md](docs/ui.md) | 画面仕様・コンポーネント一覧 |
+| [docs/architecture.md](docs/architecture.md) | 技術スタック・実装方針・非機能要件 |
+| [docs/ui.md](docs/ui.md) | 画面仕様・表示状態・UI 規約 |
 | [docs/development.md](docs/development.md) | セットアップ・ビルド・デプロイ手順 |
-| [docs/testing.md](docs/testing.md) | テスト方針・完了条件 |
-| [docs/e2e-scenarios.md](docs/e2e-scenarios.md) | E2E テストシナリオ |
-| [docs/tasks.md](docs/tasks.md) | フェーズ構成・タスク一覧 |
 
 ## クイックスタート
 
