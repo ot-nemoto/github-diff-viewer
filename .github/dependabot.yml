@@ -6,6 +6,11 @@ updates:
       interval: weekly
       day: monday
     target-branch: develop
+    ignore:
+      # typescript@7 は Go ネイティブ版(tsgo)で next build が失敗するため
+      # メジャー更新を除外する (T24 / #80)
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
     groups:
       production-dependencies:
         dependency-type: production
