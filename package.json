@@ -1,6 +1,6 @@
 {
   "name": "github-diff-viewer",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "private": true,
   "scripts": {
     "prepare": "biome migrate --write",
@@ -9,8 +9,7 @@
     "build:static": "BUILD_MODE=static next build",
     "start": "next start",
     "lint": "biome check .",
-    "lint:fix": "biome check --write .",
-    "format": "biome format --write .",
+    "format": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
