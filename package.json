@@ -9,7 +9,6 @@
     "build:static": "BUILD_MODE=static next build",
     "start": "next start",
     "lint": "biome check .",
-    "lint:fix": "biome check --write .",
     "format": "biome check --write .",
     "test": "vitest run",
     "test:watch": "vitest",
